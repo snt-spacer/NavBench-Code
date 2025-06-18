@@ -11,16 +11,16 @@
 [![License](https://img.shields.io/badge/license-BSD--3-yellow.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![License](https://img.shields.io/badge/license-Apache--2.0-yellow.svg)](https://opensource.org/license/apache-2-0)
 
-<!-- [![Paper](https://img.shields.io/badge/Paper-arXiv-green)](INSERT_ARXIV_LINK) 
+<!-- [![Paper](https://img.shields.io/badge/Paper-arXiv-green)](INSERT_ARXIV_LINK)
 [![Website](https://img.shields.io/badge/Website-Project_Page-blue)](INSERT_WEBSITE_LINK)   -->
 
 Overview
 -
 NavBench is a **multi-domain reinforcement learning benchmark** designed for robotic navigation tasks in **terrestrial, aquatic, and space environments**. Built on [IsaacLab](https://isaac-sim.github.io/IsaacLab), our framework enables:
 
-✅ **Fair comparisons** across different robots and mobility systems  
-✅ **Scalable training pipelines** for reinforcement learning agents  
-✅ **Sim-to-real transfer validation** on physical robots  
+✅ **Fair comparisons** across different robots and mobility systems
+✅ **Scalable training pipelines** for reinforcement learning agents
+✅ **Sim-to-real transfer validation** on physical robots
 
 ![Overview](docs/source/_static/navbench_overview.png)
 
@@ -54,7 +54,7 @@ Reproducibility
 | :---------------- | :--------------: | :-------------------: |
 | Jetbot            |   Kingfisher     |   FloatingPlatform    |
 | Leatherback       |
-| Turtlebot2        | 
+| Turtlebot2        |
 
 #### Tasks
 - GoToPosition
@@ -72,17 +72,17 @@ Reproducibility
 ### PPO Hyperparameters
 
 
-| Parameter         | Value    | 
-| :---------------- | :------: | 
-| Rollouts          |   32     | 
-| Learning Epochs   |   8      | 
-| Mini Batches      |  8       | 
-| Discount Factor   |  0.99    | 
-| Lambda            |  0.95    | 
-| Learning Rate     |  5.0e-04 | 
-| KL Threshold      |  0.016   | 
-| Epochs            |  1000    | 
-| Network size      |  32x32   | 
+| Parameter         | Value    |
+| :---------------- | :------: |
+| Rollouts          |   32     |
+| Learning Epochs   |   8      |
+| Mini Batches      |  8       |
+| Discount Factor   |  0.99    |
+| Lambda            |  0.95    |
+| Learning Rate     |  5.0e-04 |
+| KL Threshold      |  0.016   |
+| Epochs            |  1000    |
+| Network size      |  32x32   |
 
 ### 🧪 Evaluation and visualization
 Play trained models
@@ -117,7 +117,7 @@ Success Rate on multiple frameworks
 -
 You can download all the trained models from this [link](/models/).
 
-### Simulation 
+### Simulation
 
 <div align="center">
   <img src="docs/source/_static/performance_metrics_sim.png" width="100%">
@@ -136,4 +136,3 @@ You can download all the trained models from this [link](/models/).
 | Turtlebot 2              | Kingfisher            | Floating platform                 |
 | :---------------- | :--------------: | :-------------------: |
 | <div align="center"><img src="docs/source/_static/sim2realturtlebot.gif" width="80%"></div>            |   <div align="center"><img src="docs/source/_static/sim2realkingfish.gif" width="80%"></div>     |   <div align="center"><img src="docs/source/_static/sim2realFP.gif" width="80%"></div>    |
-
