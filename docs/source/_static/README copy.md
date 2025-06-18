@@ -1,4 +1,6 @@
-![Isaac Lab](docs/source/_static/nav_bench_banner.png)
+<div align="center">
+  <img src="media/nav_bench_banner.png" width="100%">
+</div>
 
 # NavBench
 *A Unified Robotics Benchmark for Reinforcement Learning-Based Autonomous Navigation.*
@@ -16,13 +18,15 @@
 
 Overview
 -
-NavBench is a **multi-domain reinforcement learning benchmark** designed for robotic navigation tasks in **terrestrial, aquatic, and space environments**. Built on [IsaacLab](https://isaac-sim.github.io/IsaacLab), our framework enables:
+NavBench is a **multi-domain reinforcement learning benchmark** designed for robotic navigation tasks in **terrestrial, aquatic, and space environments**. Built on **IsaacLab**, our framework enables:
 
 ✅ **Fair comparisons** across different robots and mobility systems  
 ✅ **Scalable training pipelines** for reinforcement learning agents  
 ✅ **Sim-to-real transfer validation** on physical robots  
 
-![Overview](docs/source/_static/navbench_overview.png)
+<div align="center">
+  <img src="media/navbench_overview.png" width="80%">
+</div>
 
 Features
 -
@@ -37,8 +41,8 @@ Features
 -
 Clone this repo and start the docker container.
 ```
-git clone .
-cd NavBench-Code
+git clone 
+cd Isaaclab_RANS
 ./docker/container.py start
 ./docker/container.py enter
 ```
@@ -66,7 +70,7 @@ Reproducibility
 > The paper was tested using SKRL and RL_Games for the `isaac_lab_rl_framework`.
 
 <div align="center">
-  <img src="docs/source/_static/rewards_ppo.png" width="80%">
+  <img src="media/rewards_ppo.png" width="80%">
 </div>
 
 ### PPO Hyperparameters
@@ -93,7 +97,7 @@ Evaluation & Metrics
 ```
 ```
 <div align="center">
-  <img src="docs/source/_static/eval_metrics_per_task.png" width="80%">
+  <img src="media/eval_metrics_per_task.png" width="80%">
 </div>
 
 Success Rate on multiple frameworks
@@ -120,14 +124,14 @@ You can download all the trained models from this [link](/models/).
 ### Simulation 
 
 <div align="center">
-  <img src="docs/source/_static/performance_metrics_sim.png" width="100%">
+  <img src="media/performance_metrics_sim.png" width="100%">
 </div>
 
 ### Real-world
 
 | Turtlebot 2              | Kingfisher            | Floating platform                 |
 | :---------------- | :--------------: | :-------------------: |
-| <div align="center"><img src="docs/source/_static/Turtlebot_GoToPosition_plots.png" width="80%"></div>            |   <div align="center"><img src="docs/source/_static/Kingfisher_GoToPosition_plots.png" width="80%"></div>     |   <div align="center"><img src="docs/source/_static/FloatingPlatform_GoToPosition_plots.png" width="80%"></div>    |
+| <div align="center"><img src="media/Turtlebot_GoToPosition_plots.png" width="80%"></div>            |   <div align="center"><img src="media/Kingfisher_GoToPosition_plots.png" width="80%"></div>     |   <div align="center"><img src="media/FloatingPlatform_GoToPosition_plots.png" width="80%"></div>    |
 
 
 🎥 Real-world deployments
@@ -135,5 +139,10 @@ You can download all the trained models from this [link](/models/).
 
 | Turtlebot 2              | Kingfisher            | Floating platform                 |
 | :---------------- | :--------------: | :-------------------: |
-| <div align="center"><img src="docs/source/_static/sim2realturtlebot.gif" width="80%"></div>            |   <div align="center"><img src="docs/source/_static/sim2realkingfish.gif" width="80%"></div>     |   <div align="center"><img src="docs/source/_static/sim2realFP.gif" width="80%"></div>    |
+| <div align="center"><img src="media/sim2realturtlebot.gif" width="80%"></div>            |   <div align="center"><img src="media/sim2realkingfish.gif" width="80%"></div>     |   <div align="center"><img src="media/sim2realFP.gif" width="80%"></div>    |
 
+
+<!-- Cite
+-
+```
+``` -->
