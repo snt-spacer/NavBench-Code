@@ -1,138 +1,152 @@
-![Isaac Lab](docs/source/_static/nav_bench_banner.png)
+# NavBench Code:
+### A Unified Robotics Benchmark for Reinforcement Learning-Based Autonomous Navigation.
 
-# NavBench Code
-*A Unified Robotics Benchmark for Reinforcement Learning-Based Autonomous Navigation.*
+This tutorial shows hot to create a robotic system, linking it to tasks, and training a Reinforcement Learning (RL) agent using the RANS version of Isaac Lab framework. As an example, we use the robot named `floating_platform`.
+---
 
-[![IsaacSim](https://img.shields.io/badge/IsaacSim-4.5.0-silver.svg)](https://docs.isaacsim.omniverse.nvidia.com/latest/index.html)
-[![Python](https://img.shields.io/badge/python-3.10-blue.svg)](https://docs.python.org/3/whatsnew/3.10.html)
-[![Linux platform](https://img.shields.io/badge/platform-linux--64-orange.svg)](https://releases.ubuntu.com/20.04/)
-[![Windows platform](https://img.shields.io/badge/platform-windows--64-orange.svg)](https://www.microsoft.com/en-us/)
-[![pre-commit](https://img.shields.io/github/actions/workflow/status/isaac-sim/IsaacLab/pre-commit.yaml?logo=pre-commit&logoColor=white&label=pre-commit&color=brightgreen)](https://github.com/isaac-sim/IsaacLab/actions/workflows/pre-commit.yaml)
-[![License](https://img.shields.io/badge/license-BSD--3-yellow.svg)](https://opensource.org/licenses/BSD-3-Clause)
-[![License](https://img.shields.io/badge/license-Apache--2.0-yellow.svg)](https://opensource.org/license/apache-2-0)
+## Overview of the Example Files and Structure
 
-<!-- [![Paper](https://img.shields.io/badge/Paper-arXiv-green)](INSERT_ARXIV_LINK)
-[![Website](https://img.shields.io/badge/Website-Project_Page-blue)](INSERT_WEBSITE_LINK)   -->
+### Main Folders and Their Roles
+- **`NavBench-Code/source/isaaclab_tasks/isaaclab_tasks/rans/robots/`**:
+  Contains the robot configuration and class descriptions. For example, `floating_platform.py` specifies the `floating_platform` robot's properties.
 
-Overview
--
-NavBench is a **multi-domain reinforcement learning benchmark** designed for robotic navigation tasks in **terrestrial, aquatic, and space environments**. Built on [IsaacLab](https://isaac-sim.github.io/IsaacLab), our framework enables:
+- **`NavBench-Code/source/isaaclab_tasks/isaaclab_tasks/direct/ROBOT_NAME`**:
+  Contains task descriptions for robot-task pairs. Tasks are registered as Gym environments with unique IDs in the `__init__.py` file.
 
-✅ **Fair comparisons** across different robots and mobility systems
-✅ **Scalable training pipelines** for reinforcement learning agents
-✅ **Sim-to-real transfer validation** on physical robots
+- **Subdirectories of `rans`**:
+  - `robots`: Contains specific robot class definitions.
+  - `robots_cfg`: Contains robot-specific configurations.
+  - `tasks`: Implements various tasks for the robots, like navigation or velocity tracking.
+  - `tasks_cfg`: Contains task-specific configuration files.
+  - `utils`: Provides utility functions like generation of unique per-environment RNG, functionalities to evaluate and plot the results of testing a trained model for a specific robot-task pair.
 
-![Overview](docs/source/_static/navbench_overview.png)
+---
 
-Features
--
-- **Diverse Navigation Tasks**: `GoToPosition`, `GoToPose`, `GoThroughPositions`, `TrackVelocities`, and more.
-- **Cross-Domain Evaluation**: Supports thruster-based platforms, wheeled robots, and water-based propulsion.
-- **Unified Task Definitions**: Standardized observation space, reward structures, and evaluation metrics.
-- **Efficient Simulation**: GPU-accelerated rollouts via IsaacLab for rapid RL training.
-- **Real-World Validation**: Policies successfully deployed on a Floating Platform, Kingfisher, and Turtlebot2.
+## Step 1: Configuring the Robot
 
+### Example File: `floating_platform.py`
+**Location**: `NavBench-Code/source/isaaclab_tasks/isaaclab_tasks/rans/robots/floating_platform.py`
 
-🚧 Installation
--
-Clone this repo and start the docker container.
+This file defines the robot configuration using the `FLOATING_PLATFORM_CFG` object. Key aspects include:
+- **USD Path**: Specifies the 3D model file.
+- **Physical Properties**: Enables simulation features like gravity and velocity constraints.
+- **Initial State**: Sets default positions and joint values.
+
+Example:
+```python
+FLOATING_PLATFORM_CFG = ArticulationCfg(
+    spawn=sim_utils.UsdFileCfg(
+        usd_path=f"{REPO_ROOT_PATH}/floating_platform.usd",
+        rigid_props=sim_utils.RigidBodyPropertiesCfg(disable_gravity=True),
+    ),
+    init_state=ArticulationCfg.InitialStateCfg(pos=(0.0, 0.0, 0.5)),
+)
 ```
-git clone .
-cd NavBench-Code
+
+---
+
+## Step 2: Defining Tasks
+
+### Example Folder: `tasks/`
+**Location**: `NavBench-Code/source/isaaclab_tasks/isaaclab_tasks/rans/tasks/`
+
+Tasks are implemented here. For example:
+- **File**: `go_to_position.py` describes the "Go To Position" task.
+- **Core Task Logic**: Uses the `TaskCore` base class to define observation space, rewards, and task dynamics.
+
+Example:
+```python
+class GoToPositionTask(TaskCore):
+    def get_observations(self):
+        # Observation logic
+        pass
+
+    def compute_rewards(self):
+        # Reward logic
+        pass
+```
+
+---
+
+## Step 3: Configuring Task Environments
+
+### Example File: `floating_platform_go_to_position.py`
+**Location**: `NavBench-Code/source/isaaclab_tasks/isaaclab_tasks/direct/floating_platform/floating_platform_go_to_position.py`
+
+This file links the robot and task configurations to create an RL environment.
+
+Example:
+```python
+@configclass
+class FloatingPlatformGoToPositionEnvCfg(DirectRLEnvCfg):
+    scene = InteractiveSceneCfg(num_envs=4096)
+    robot_cfg = FloatingPlatformRobotCfg()
+    task_cfg = GoToPositionCfg()
+    episode_length_s = 40.0
+```
+
+---
+
+## Step 4: Registering Gym Environments
+
+### Example File: `__init__.py`
+**Location**: `NavBench-Code/source/isaaclab_tasks/isaaclab_tasks/direct/floating_platform/__init__.py`
+
+Gym environments are registered with unique IDs, linking them to specific task and robot configurations.
+
+Example registration:
+```python
+gym.register(
+    id="Isaac-FloatingPlatform-GoToPosition-Direct-v0",
+    entry_point=f"{__name__}.floating_platform_go_to_position_env:FloatingPlatformGoToPositionEnv",
+    disable_env_checker=True,
+    kwargs={
+        "env_cfg_entry_point": f"{__name__}.floating_platform_go_to_position_env:FloatingPlatformGoToPositionEnvCfg",
+        "rl_games_cfg_entry_point": f"{agents.__name__}:rl_games_ppo_cfg.yaml",
+        "rsl_rl_cfg_entry_point": f"{agents.__name__}.rsl_rl_ppo_cfg:FloatingPlatformPPORunnerCfg",
+        "skrl_cfg_entry_point": f"{agents.__name__}:skrl_ppo_cfg.yaml",
+        "sb3_cfg_entry_point": f"{agents.__name__}:sb3_ppo_cfg.yaml",
+    },
+)
+```
+
+---
+
+## Step 5: Training an RL Agent
+
+### RL Libraries
+Compatible libraries include `rl_games`, `skrl`, and `Stable-Baselines3`. Example configuration files are referenced in the `__init__.py`.
+
+### Training Command
+
+Start the docker:
+```
 ./docker/container.py start
 ./docker/container.py enter
 ```
 
-Reproducibility
--
-### 🧠 Training pipelines for all tasks and robots
+Use the environment ID (e.g., `"Isaac-FloatingPlatform-GoToPosition-Direct-v0"`) to start training.
+
+Example command to train a policy with `rl_games`:
+```bash
+ ./isaaclab.sh -p scripts/reinforcement_learning/rl_games/train.py --task Isaac-FloatingPlatform-GoToPosition-Direct-v0 --num_envs 4096 --headless
 ```
-./isaaclab.sh -p scripts/reinforcement_learning/<isaac_lab_rl_framework>/train.py --task=Isaac-RANS-Single-v0 --headless env.robot_name=<robot_name> env.task_name=<task>
+
+Example command to play a trained policy with `rl_games`:
+```bash
+ ./isaaclab.sh -p scripts/reinforcement_learning/rl_games/play.py --task Isaac-FloatingPlatform-GoToPosition-Direct-v0 --num_envs 16
 ```
-#### Robots
-| Land              | Water            | Space                 |
-| :---------------- | :--------------: | :-------------------: |
-| Jetbot            |   Kingfisher     |   FloatingPlatform    |
-| Leatherback       |
-| Turtlebot2        |
 
-#### Tasks
-- GoToPosition
-- GoToPose
-- GoThroughPositions
-- TrackVelocities
-
->[!Note]
-> The paper was tested using SKRL and RL_Games for the `isaac_lab_rl_framework`.
-
-<div align="center">
-  <img src="docs/source/_static/rewards_ppo.png" width="80%">
-</div>
-
-### PPO Hyperparameters
-
-
-| Parameter         | Value    |
-| :---------------- | :------: |
-| Rollouts          |   32     |
-| Learning Epochs   |   8      |
-| Mini Batches      |  8       |
-| Discount Factor   |  0.99    |
-| Lambda            |  0.95    |
-| Learning Rate     |  5.0e-04 |
-| KL Threshold      |  0.016   |
-| Epochs            |  1000    |
-| Network size      |  32x32   |
-
-### 🧪 Evaluation and visualization
-Play trained models
+Alternatively, to easily switch between robot and tasks, one can use the Single environment:
+```bash
+./isaaclab.sh -p scripts/reinforcement_learning/rl_games/train.py --task Isaac-RANS-Single-v0 --num_envs 4096 --headless env.robot_name=FloatingPlatform env.task_name=GoToPosition
 ```
-./isaaclab.sh -p scripts/reinforcement_learning/<isaac_lab_rl_framework>/play.py --task=Isaac-RANS-Single-v0 --num_envs=32 env.robot_name=<robot_name> env.task_name=<task> --checkpoint=<path_to_pt_model>
+
+In the previous command, the `env.robot_name` is used to select which robot should be used, and the `env.task_name` is used to select the task that should be loaded.
+These names relate to the ones given inside the factories in these files:
+```bash
+source/isaaclab_tasks/isaaclab_tasks/rans/robots_cfg/__init__.py
+source/isaaclab_tasks/isaaclab_tasks/rans/robots/__init__.py
+source/isaaclab_tasks/isaaclab_tasks/rans/tasks_cfg/__init__.py
+source/isaaclab_tasks/isaaclab_tasks/rans/tasks/__init__.py
 ```
-Evaluation & Metrics
-```
-```
-<div align="center">
-  <img src="docs/source/_static/eval_metrics_per_task.png" width="80%">
-</div>
-
-Success Rate on multiple frameworks
-| Task |	Robot	| rl_games | skrl |
-| :---- | :------ | --------: | ----: |
-| GoThroughPositions |	FloatingPlatform	| 1.000 |	1.000 |
-| GoThroughPositions |	Kingfisher	| 0.994 |	1.000 |
-| GoThroughPositions |	Turtlebot2	| 1.000 |	1.000 |
-| GoToPose |	FloatingPlatform	| 1.000 |	0.999 |
-| GoToPose |	Kingfisher	| 0.827 |	0.898 |
-| GoToPose |	Turtlebot2	| 0.834 |	0.937 |
-| GoToPosition |	FloatingPlatform	| 0.997 |	1.000 |
-| GoToPosition |	Kingfisher	| 0.997 |	0.600 |
-| GoToPosition |	Turtlebot2	| 0.991 |	0.993 |
-| TrackVelocities |	FloatingPlatform	| 0.885 |	0.968 |
-| TrackVelocities |	Kingfisher	| 0.992 |	1.000 |
-| TrackVelocities |	Turtlebot2	| 0.999 |	1.000 |
-
-
-📊 Pre-trained models and performance metrics
--
-You can download all the trained models from this [link](/models/).
-
-### Simulation
-
-<div align="center">
-  <img src="docs/source/_static/performance_metrics_sim.png" width="100%">
-</div>
-
-### Real-world
-
-| Turtlebot 2              | Kingfisher            | Floating platform                 |
-| :---------------- | :--------------: | :-------------------: |
-| <div align="center"><img src="docs/source/_static/Turtlebot_GoToPosition_plots.png" width="80%"></div>            |   <div align="center"><img src="docs/source/_static/Kingfisher_GoToPosition_plots.png" width="80%"></div>     |   <div align="center"><img src="docs/source/_static/FloatingPlatform_GoToPosition_plots.png" width="80%"></div>    |
-
-
-🎥 Real-world deployments
--
-
-| Turtlebot 2              | Kingfisher            | Floating platform                 |
-| :---------------- | :--------------: | :-------------------: |
-| <div align="center"><img src="docs/source/_static/sim2realturtlebot.gif" width="80%"></div>            |   <div align="center"><img src="docs/source/_static/sim2realkingfish.gif" width="80%"></div>     |   <div align="center"><img src="docs/source/_static/sim2realFP.gif" width="80%"></div>    |
