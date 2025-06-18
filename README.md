@@ -1,6 +1,6 @@
 ![Isaac Lab](docs/source/_static/nav_bench_banner.png)
 
-# NavBench
+# NavBench Website
 *A Unified Robotics Benchmark for Reinforcement Learning-Based Autonomous Navigation.*
 
 [![IsaacSim](https://img.shields.io/badge/IsaacSim-4.5.0-silver.svg)](https://docs.isaacsim.omniverse.nvidia.com/latest/index.html)
@@ -10,6 +10,11 @@
 [![pre-commit](https://img.shields.io/github/actions/workflow/status/isaac-sim/IsaacLab/pre-commit.yaml?logo=pre-commit&logoColor=white&label=pre-commit&color=brightgreen)](https://github.com/isaac-sim/IsaacLab/actions/workflows/pre-commit.yaml)
 [![License](https://img.shields.io/badge/license-BSD--3-yellow.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![License](https://img.shields.io/badge/license-Apache--2.0-yellow.svg)](https://opensource.org/license/apache-2-0)
+
+This is a landing page for all the projects related to NavBench. Below there's the links to the code of the project:
+
+Main Code (RAL Submission)
+- [![Main Code](https://img.shields.io/badge/NavBench-Github-blue?logo=github)](https://anonymous.4open.science/r/NavBench-Code-E08E/README.md)
 
 <!-- [![Paper](https://img.shields.io/badge/Paper-arXiv-green)](INSERT_ARXIV_LINK)
 [![Website](https://img.shields.io/badge/Website-Project_Page-blue)](INSERT_WEBSITE_LINK)   -->
@@ -37,7 +42,7 @@ Features
 -
 Clone this repo and start the docker container.
 ```
-git clone .
+git clone https://anonymous.4open.science/r/NavBench-Code-E08E/
 cd NavBench-Code
 ./docker/container.py start
 ./docker/container.py enter
